@@ -31,6 +31,8 @@ cat tests/in0 | java Solution
 ```
 Currently, doesn't return the index of the word matched, but that would be easy enough to implement if the grid iterator were changed.
 
+You can also print out the automaton using it's `toString()` method.
+
 
 ## Example
 Example below based on the dictionary: {he, his, hers, she}
