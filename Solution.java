@@ -29,7 +29,7 @@ public class Solution {
     }
 
     AC ac = new AC(words, sigma);
-    System.out.println(ac);
+    //System.out.println(ac);
     ArrayList<String> matches = new ArrayList<>();
 
     String[] strs = new String[8];
