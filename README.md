@@ -15,13 +15,13 @@ Let k denote the amount of symbols in our alphabet.
 ### Construction
 * Phase 1 : Adding patterns to the keyowrd trie is O(|p|) for each pattern, thus O(n) overall.
 * Phase 2 : Adding gotos for the root node takes O(k)
-* Phase 3 : Building the failure states takes O(n) time for the BFS because we must visit each node in our automaton. Failure states, for all patterns (not for each), are followed &le; n times. Overall this pahse is O(n).
+* Phase 3 : Building the failure states takes O(n) time for the BFS because we must visit each node in our automaton. Failure states, for all patterns (not for each), are followed &le; n times. Overall this phase is O(n).
 
 ### Searching a Text
 Let m denote the amount of symbols in our text to search.
 At each step we can either follow a failure state or go to a child node. The amount of times we follow a failure state plus the amount of times we proceed to a child is O(m).
 
-Overall, for construction and searchig, it takes O(m + n + k).
+Overall, for construction and searching, it takes O(m + n + k).
 
 ## Testing
 My implementation is currently being applied to word searches, a somewhat practical use. To test simply
