@@ -8,16 +8,16 @@ import java.util.*;
  *  children are forward edges
  *  failures are back or cross edges
  */
-public class AC {
+public class AC<T> {
   // node count, used for labeling
   private int nodes;
   // dictionary
-  private ArrayList<String> words;
+  private ArrayList<ArrayList<T> words;
   // alphabet
-  private char[] sigma;
+  private Set<T> sigma;
   private Node root;
 
-  public AC(ArrayList<String> words, char[] sigma) {
+  public AC(ArrayList<ArrayList<T>> words, Set<T> sigma) {
     this.nodes = 0;
     this.sigma = sigma;
     this.words = words;
@@ -26,27 +26,30 @@ public class AC {
     process();
   }
 
-  // returns arraylist of matched strings
-  public ArrayList<String> match(String str) {
+  // returns arraylist of Matches
+  public ArrayList<Match> match(String str) {
     return match(str.toCharArray());
   }
-  public ArrayList<String> match(char[] arr) {
-    ArrayList<String> matched = new ArrayList<String>();
+  public ArrayList<Match> match(T[] arr) {
+    ArrayList<Match> matches = new ArrayList<>();
     Node curr = this.root;
     
     // step character by character through the automaton
     // add words when end states "isWord" are reached
-    for (char c : arr) {
+    for (int i = 0; i < arr.length; i++) {
+      T c = arr[c];
+      
       while (!curr.hasChild(c)) { 
         curr = curr.getFailure(); 
       }
 
       curr = curr.getChild(c);
       if (curr.isWord()) {
-        matched.add(curr.getWord());
+        String word = curr.getWord();
+        matches.add(new Match(word, i - word.length() + 1));
       }
     }
-    return matched;
+    return matches;
   }
 
   // build the automaton
@@ -57,14 +60,14 @@ public class AC {
     /*
      * Phase 1, add words to key word trie
      */ 
-    for (String word : words) {
+    for (ArrayList<T> word : words) {
       add(word);
     }
     
     /*
      * Pahse 2, complete gotos for the root
      */
-    for (char c : this.sigma) {
+    for (T c : this.sigma) {
       if (!this.root.hasChild(c)) {
         this.root.addChild(c, this.root);
       }
