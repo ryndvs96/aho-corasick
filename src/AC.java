@@ -43,7 +43,7 @@ public class AC<T> {
       curr = curr.getChild(c);
       if (curr.isWord()) {
         List<T> word = curr.getWord();
-        matches.add(new Match(word, String.format("(%d, %d)", it.geti(), it.getj())));
+        matches.add(new Match(word, String.format("(%d, %d, %s)", it.geti(), it.getj(), it.direction())));
       }
     }
     return matches;
