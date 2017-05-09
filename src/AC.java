@@ -12,10 +12,10 @@ public class AC<T> {
   // node count, used for labeling
   private int nodes;
   // dictionary
-  private ArrayList<ArrayList<T> words;
+  private ArrayList<ArrayList<T>> words;
   // alphabet
   private Set<T> sigma;
-  private Node root;
+  private Node<T> root;
 
   public AC(ArrayList<ArrayList<T>> words, Set<T> sigma) {
     this.nodes = 0;
@@ -27,17 +27,14 @@ public class AC<T> {
   }
 
   // returns arraylist of Matches
-  public ArrayList<Match> match(String str) {
-    return match(str.toCharArray());
-  }
-  public ArrayList<Match> match(T[] arr) {
+  public ArrayList<Match> match(GridIterator<T> it) {
     ArrayList<Match> matches = new ArrayList<>();
-    Node curr = this.root;
+    Node<T> curr = this.root;
     
     // step character by character through the automaton
     // add words when end states "isWord" are reached
-    for (int i = 0; i < arr.length; i++) {
-      T c = arr[c];
+    while (it.hasNext()) {
+      T c = it.next();
       
       while (!curr.hasChild(c)) { 
         curr = curr.getFailure(); 
@@ -45,8 +42,8 @@ public class AC<T> {
 
       curr = curr.getChild(c);
       if (curr.isWord()) {
-        String word = curr.getWord();
-        matches.add(new Match(word, i - word.length() + 1));
+        List<T> word = curr.getWord();
+        matches.add(new Match(word, String.format("(%d, %d)", it.geti(), it.getj())));
       }
     }
     return matches;
@@ -54,7 +51,7 @@ public class AC<T> {
 
   // build the automaton
   private void process() {
-    this.root = new Node(this.nodes);
+    this.root = new Node<T>(this.nodes);
     this.nodes++;
     
     /*
@@ -81,11 +78,11 @@ public class AC<T> {
 
   private void buildFailures() {
     // queue
-    LinkedList<Node> q = new LinkedList<>();
+    LinkedList<Node<T>> q = new LinkedList<>();
 
     // base cases root children
-    for (char c : this.root.getChildren()) {
-      Node child = this.root.getChild(c);
+    for (T c : this.root.getChildren()) {
+      Node<T> child = this.root.getChild(c);
       if (child == this.root) {
         continue;
       }
@@ -95,8 +92,8 @@ public class AC<T> {
 
     // recursive bfs cases
     while (!q.isEmpty()) {
-      Node p = q.removeFirst();
-      for (char c : p.getChildren()) {
+      Node<T> p = q.removeFirst();
+      for (T c : p.getChildren()) {
         Node child = p.getChild(c);
         q.addLast(child);
 
@@ -112,19 +109,18 @@ public class AC<T> {
   }
 
   // add a word to the trie
-  private void add(String word) {
-    char[] arr = word.toCharArray();
-    int n = arr.length;
+  private void add(ArrayList<T> word) {
+    int n = word.size();
 
     // add word to keyword tree
-    Node p = this.root;
+    Node<T> p = this.root;
     for (int i = 0; i < n; i++) {
-      char c = arr[i];
-      Node curr = null;
+      T c = word.get(i);
+      Node<T> curr = null;
       if (p.hasChild(c)) {
         curr = p.getChild(c);
       } else {
-        curr = new Node(this.nodes);
+        curr = new Node<T>(this.nodes);
         this.nodes++;
         p.addChild(c, curr);
       }

@@ -44,7 +44,9 @@ public class WordSearchSolve {
     AC<Character> ac = new AC<Character>(words, sigma);
     //System.out.println(ac);
 
-    ArrayList<Match> matches = ac.match(grid.iterator());
-
+    ArrayList<Match> matches = ac.match(ws.iterator());
+    for (Match ms : matches) {
+      System.out.printf("%s\n", ms.toString());
+    }
   }
 }

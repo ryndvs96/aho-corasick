@@ -1,10 +1,10 @@
 import java.util.*;
 
-public class Node {
+public class Node<T> {
   private int id;
   private Node failure;
-  private String word;
-  private HashMap<Character, Node> children;
+  private List<T> word;
+  private HashMap<T, Node> children;
   public Node(int id) {
     this.id = id;
     this.failure = null;
@@ -20,32 +20,32 @@ public class Node {
   public boolean isWord() {
     return this.word != null;
   }
-  public String getWord() {
+  public List<T> getWord() {
     return this.word;
   }
-  public void setWord(String word) {
+  public void setWord(List<T> word) {
     this.word = word;
   }
 
   // go tos (aka children)
-  public boolean hasChild(char c) {
+  public boolean hasChild(T c) {
     return this.children.containsKey(c);
   }
-  public Node getChild(char c) {
+  public Node<T> getChild(T c) {
     return this.children.get(c);
   }
-  public Set<Character> getChildren() {
+  public Set<T> getChildren() {
     return this.children.keySet();
   }
-  public void addChild(char c, Node n) {
+  public void addChild(T c, Node<T> n) {
     this.children.put(c, n);
   }
 
   // failure function node
-  public Node getFailure() {
+  public Node<T> getFailure() {
     return this.failure;
   }
-  public void setFailure(Node n) {
+  public void setFailure(Node<T> n) {
     this.failure = n;
   }
 
